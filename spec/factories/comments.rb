@@ -5,4 +5,5 @@ FactoryGirl.define do
     comment "Man do I love this"
     score 1
   end
+
 end

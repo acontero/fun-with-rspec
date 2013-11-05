@@ -5,9 +5,13 @@ describe Link do
   	@link = FactoryGirl.create(:link)
   end
 
-  it "has a url"
+  it "has a url" do
+   @link.url.should be_present
+  end
 
-  it "has a score"
+  it "has a score" do
+    @link.score.should be_present
+  end
 
   it "belongs to a user" do
   	user = FactoryGirl.create(:user)
@@ -21,9 +25,23 @@ describe Link do
   		@link = FactoryGirl.create(:link_with_comment)
   	end
 
-    it "has a comment"
+    it "has a comment" do
+      @link.comments.count.should == 1
+    end
 
     it "updates its cumulative score when a comment gets a score" do
+      comment = @link.comments.first
+      comment2 = FactoryGirl.create(:comment)
+      @link.comments << comment2
+      
+      comment.vote_up
+      2.times {comment2.vote_up}    
+    
+      @link.save
+      @link.reload
+    
+      @link.score.should == 5
+
       ## This one is tricky. You'll have to have several lines of code here. 
       ## The idea is that a link with 2 comments, one of a score 2, the other of a score 3, 
       ## will have a composite score of 5.
